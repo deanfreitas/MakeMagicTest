@@ -29,7 +29,7 @@ public class CharacterController {
 
     @GetMapping("/character")
     public List<CharacterSchool> getAllCharacter(@RequestParam Map<String, ?> allParams) {
-        return characterService.getAllCharacters(allParams);
+     return characterService.getAllCharacters(allParams);
     }
 
     @GetMapping("/character/{id}")

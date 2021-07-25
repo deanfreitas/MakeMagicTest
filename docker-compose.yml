@@ -1,19 +1,19 @@
 version: "3.6"
 services:
-  #  app:
-  #    container_name: app
-  #    restart: always
-  #    build: .
-  #    ports:
-  #      - "8080:8080"
-  #    links:
-  #      - mysql
-  #      - redis
-  #    depends_on:
-  #      - mysql
-  #      - redis
-  #    networks:
-  #      - makemagictest-node-network
+  app:
+    container_name: app
+    restart: always
+    build: .
+    ports:
+      - "8080:8080"
+    links:
+      - mysql
+      - redis
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - makemagictest-node-network
 
   mysql:
     container_name: mysql
