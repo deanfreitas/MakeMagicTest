@@ -1,0 +1,47 @@
+version: "3.6"
+services:
+  #  app:
+  #    container_name: app
+  #    restart: always
+  #    build: .
+  #    ports:
+  #      - "8080:8080"
+  #    links:
+  #      - mysql
+  #      - redis
+  #    depends_on:
+  #      - mysql
+  #      - redis
+  #    networks:
+  #      - makemagictest-node-network
+
+  mysql:
+    container_name: mysql
+    restart: always
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_USER: "root"
+      MYSQL_PASSWORD: "root"
+      MYSQL_DATABASE: "makemagictest"
+    networks:
+      - makemagictest-node-network
+
+  redis:
+    container_name: redis
+    restart: always
+    image: redis:latest
+    command: redis-server --requirepass root
+    ports:
+      - "6379:6379"
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    networks:
+      - makemagictest-node-network
+
+networks:
+  makemagictest-node-network:
+    driver: bridge
