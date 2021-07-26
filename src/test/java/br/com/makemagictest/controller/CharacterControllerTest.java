@@ -38,6 +38,7 @@ import br.com.makemagictest.service.CharacterService;
 public class CharacterControllerTest {
 
     private static final long longValue = Long.MAX_VALUE;
+    private static final String URI = "/api/v1/character/";
 
     @MockBean
     private CharacterService characterService;
@@ -48,34 +49,34 @@ public class CharacterControllerTest {
     @Test
     public void whenGetCharacters_thenReturnJsonArray() throws Exception {
         when(characterService.getAllCharacters(new HashMap<>())).thenReturn(Collections.singletonList(createCharacterSchool()));
-        mock.perform(get("/api/v1//character")).andExpect(status().isOk())
+        mock.perform(get(URI)).andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(1)));
     }
 
     @Test
     public void whenGetCharacters_thenReturnEmptyArray() throws Exception {
         when(characterService.getAllCharacters(new HashMap<>())).thenReturn(Collections.emptyList());
-        mock.perform(get("/api/v1//character")).andExpect(status().isOk())
+        mock.perform(get(URI)).andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(0)));
     }
 
     @Test
     public void whenGetCharacter_thenReturnCharacter() throws Exception {
         when(characterService.getCharacter(longValue)).thenReturn(createCharacterSchool());
-        mock.perform(get("/api/v1/character/" + longValue)).andExpect(status().isOk())
+        mock.perform(get(URI + longValue)).andExpect(status().isOk())
                 .andExpect((jsonPath("$.name", is(createCharacterSchool().getName()))));
     }
 
     @Test
     public void whenGetCharacter_thenReturnCharacterNotFoundException() throws Exception {
         when(characterService.getCharacter(longValue)).thenThrow(new CharacterSchoolNotFoundException(longValue));
-        mock.perform(get("/api/v1/character/" + longValue)).andExpect(status().isNotFound());
+        mock.perform(get(URI + longValue)).andExpect(status().isNotFound());
     }
 
     @Test
     public void whenPostCharacter_thenReturnCharacter() throws Exception {
         when(characterService.saveCharacter(any(CharacterSchoolRequest.class))).thenReturn(createCharacterSchool());
-        mock.perform(post("/api/v1/character")
+        mock.perform(post(URI)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(createCharacterSchoolRequest())))
                 .andExpect(status().isCreated())
@@ -86,7 +87,7 @@ public class CharacterControllerTest {
     public void whenPutCharacter_thenReturnCharacter() throws Exception {
         when(characterService.updateCharacter(anyLong(), any(CharacterSchoolRequest.class))).thenReturn(createCharacterSchool());
 
-        mock.perform(put("/api/v1/character/" + longValue)
+        mock.perform(put(URI + longValue)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(createCharacterSchoolRequest())))
                 .andExpect(status().isOk())
@@ -97,7 +98,7 @@ public class CharacterControllerTest {
     public void whenPutCharacter_thenReturnCharactersNotFoundException() throws Exception {
         when(characterService.updateCharacter(anyLong(), any(CharacterSchoolRequest.class))).thenThrow(new CharacterSchoolNotFoundException(longValue));
 
-        mock.perform(put("/api/v1/character/" + longValue)
+        mock.perform(put(URI + longValue)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(createCharacterSchoolRequest())))
                 .andExpect(status().isNotFound());
@@ -107,7 +108,7 @@ public class CharacterControllerTest {
     public void whenDeleteCharacter_thenReturnSuccess() throws Exception {
         doNothing().when(characterService).deleteCharacter(anyLong());
 
-        mock.perform(delete("/api/v1/character/" + longValue)
+        mock.perform(delete(URI + longValue)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(createCharacterSchoolRequest())))
                 .andExpect(status().isNoContent());
@@ -117,7 +118,7 @@ public class CharacterControllerTest {
     public void whenDeleteCharacter_thenReturnCharactersNotFoundException() throws Exception {
         doThrow(new CharacterSchoolNotFoundException(longValue)).when(characterService).deleteCharacter(anyLong());
 
-        mock.perform(delete("/api/v1/character/" + longValue)
+        mock.perform(delete(URI + longValue)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(createCharacterSchool())))
                 .andExpect(status().isNotFound());

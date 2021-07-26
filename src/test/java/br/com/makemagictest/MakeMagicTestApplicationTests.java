@@ -48,6 +48,7 @@ class MakeMagicTestApplicationTests {
 
     @Container
     private static final MySQLContainer database = new MySQLContainer();
+    private static final String URI = "/api/v1/character/";
     private static Jedis jedis;
     @Autowired
     private MockMvc mock;
@@ -81,7 +82,7 @@ class MakeMagicTestApplicationTests {
 
     @Test
     void whenGetCharacters_thenReturnJsonArray() throws Exception {
-        mock.perform(get("/api/v1/character")).andExpect(status().isOk())
+        mock.perform(get(URI)).andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(1)));
     }
 
@@ -89,13 +90,13 @@ class MakeMagicTestApplicationTests {
     void whenGetCharacters_thenReturnEmptyArray() throws Exception {
         characterRepository.deleteAll();
 
-        mock.perform(get("/api/v1/character")).andExpect(status().isOk())
+        mock.perform(get(URI)).andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(0)));
     }
 
     @Test
     void whenGetCharacters_withParameter_thenReturnJsonArray() throws Exception {
-        mock.perform(get("/api/v1/character").queryParams(createMappingParameterMulti())).andExpect(status().isOk())
+        mock.perform(get(URI).queryParams(createMappingParameterMulti())).andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(1)));
     }
 
@@ -103,7 +104,7 @@ class MakeMagicTestApplicationTests {
     void whenGetCharacters_withParameter_thenReturnEmptyArray() throws Exception {
         characterRepository.deleteAll();
 
-        mock.perform(get("/api/v1/character").queryParams(createMappingParameterMulti())).andExpect(status().isOk())
+        mock.perform(get(URI).queryParams(createMappingParameterMulti())).andExpect(status().isOk())
                 .andExpect(jsonPath("$[*]", hasSize(0)));
     }
 
@@ -111,19 +112,19 @@ class MakeMagicTestApplicationTests {
     void whenGetCharacter_thenReturnCharacter() throws Exception {
         long id = characterRepository.findAll().get(0).getId();
 
-        mock.perform(get("/api/v1/character/" + id)).andExpect(status().isOk())
+        mock.perform(get(URI + id)).andExpect(status().isOk())
                 .andExpect((jsonPath("$.name", is(createCharacterSchool().getName()))));
     }
 
     @Test
     void whenGetCharacter_thenReturnCharacterNotFoundException() throws Exception {
-        mock.perform(get("/api/v1/character/" + Long.MAX_VALUE)).andExpect(status().isNotFound());
+        mock.perform(get(URI + Long.MAX_VALUE)).andExpect(status().isNotFound());
     }
 
     @Test
     void whenPostCharacter_thenReturnCharacter() throws Exception {
 
-        mock.perform(post("/api/v1/character")
+        mock.perform(post(URI)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(createCharacterSchoolRequestCorrect())))
                 .andExpect(status().isCreated())
@@ -139,7 +140,7 @@ class MakeMagicTestApplicationTests {
         characterSchoolRequest.setHouse("1760529f-6d51-4cb1-bcb1-25087fce5bde");
         characterSchoolRequest.setPatronus("stag");
 
-        mock.perform(post("/api/v1/character")
+        mock.perform(post(URI)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(characterSchoolRequest)))
                 .andExpect(status().isNotFound());
@@ -154,7 +155,7 @@ class MakeMagicTestApplicationTests {
         characterSchoolRequest.setHouse("test");
         characterSchoolRequest.setPatronus("stag");
 
-        mock.perform(post("/api/v1/character")
+        mock.perform(post(URI)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(characterSchoolRequest)))
                 .andExpect(status().isNotFound());
@@ -164,7 +165,7 @@ class MakeMagicTestApplicationTests {
     void whenPutCharacter_thenReturnCharacter() throws Exception {
         long id = characterRepository.findAll().get(0).getId();
 
-        mock.perform(put("/api/v1/character/" + id)
+        mock.perform(put(URI + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(createCharacterSchoolRequestCorrect())))
                 .andExpect(status().isOk())
@@ -182,7 +183,7 @@ class MakeMagicTestApplicationTests {
         characterSchoolRequest.setHouse("1760529f-6d51-4cb1-bcb1-25087fce5bde");
         characterSchoolRequest.setPatronus("stag");
 
-        mock.perform(put("/api/v1/character/" + id)
+        mock.perform(put(URI + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(characterSchoolRequest)))
                 .andExpect(status().isNotFound());
@@ -199,7 +200,7 @@ class MakeMagicTestApplicationTests {
         characterSchoolRequest.setHouse("test");
         characterSchoolRequest.setPatronus("stag");
 
-        mock.perform(put("/api/v1/character/" + id)
+        mock.perform(put(URI + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(createCharacterSchoolRequest())))
                 .andExpect(status().isNotFound());
@@ -209,7 +210,7 @@ class MakeMagicTestApplicationTests {
     void whenDeleteCharacter_thenReturnSuccess() throws Exception {
         long id = characterRepository.findAll().get(0).getId();
 
-        mock.perform(delete("/api/v1/character/" + id)
+        mock.perform(delete(URI + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(createCharacterSchoolRequest())))
                 .andExpect(status().isNoContent());
@@ -218,7 +219,7 @@ class MakeMagicTestApplicationTests {
     @Test
     void whenDeleteCharacter_thenReturnCharactersNotFoundException() throws Exception {
 
-        mock.perform(delete("/api/v1/character/" + Long.MAX_VALUE)
+        mock.perform(delete(URI + Long.MAX_VALUE)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(asJsonString(createCharacterSchool())))
                 .andExpect(status().isNotFound());
