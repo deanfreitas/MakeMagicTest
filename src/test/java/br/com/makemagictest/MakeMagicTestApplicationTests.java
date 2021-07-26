@@ -1,13 +1,232 @@
 package br.com.makemagictest;
 
+import static br.com.makemagictest.utilstest.Util.asJsonString;
+import static br.com.makemagictest.utilstest.Util.createCharacterSchool;
+import static br.com.makemagictest.utilstest.Util.createCharacterSchoolRequest;
+import static br.com.makemagictest.utilstest.Util.createCharacterSchoolRequestCorrect;
+import static br.com.makemagictest.utilstest.Util.createMappingParameterMulti;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.web.servlet.MockMvc;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.MySQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+import br.com.makemagictest.dto.CharacterSchoolRequest;
+import br.com.makemagictest.repository.CharacterRepository;
+import redis.clients.jedis.Jedis;
 
 @SpringBootTest
+@Testcontainers
+@AutoConfigureMockMvc
+@TestPropertySource("classpath:applicationContainer.properties")
 class MakeMagicTestApplicationTests {
 
-    @Test
-    void contextLoads() {
+    @Container
+    private static final GenericContainer redis = new GenericContainer("redis:latest")
+            .withExposedPorts(6379);
+
+    @Container
+    private static final MySQLContainer database = new MySQLContainer();
+    private static Jedis jedis;
+    @Autowired
+    private MockMvc mock;
+    @Autowired
+    private CharacterRepository characterRepository;
+
+    @BeforeAll
+    public static void before() {
+        redis.start();
+        jedis = new Jedis(redis.getContainerIpAddress(), redis.getMappedPort(6379));
     }
 
+    @AfterAll
+    public static void after() {
+        redis.stop();
+    }
+
+    @DynamicPropertySource
+    static void properties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", database::getJdbcUrl);
+        registry.add("spring.datasource.password", database::getPassword);
+        registry.add("spring.datasource.username", database::getUsername);
+        registry.add("spring.redis.host", redis::getContainerIpAddress);
+        registry.add("spring.redis.port", () -> redis.getMappedPort(6379));
+    }
+
+    @BeforeEach
+    public void prepareToTests() {
+        characterRepository.save(createCharacterSchool());
+    }
+
+    @Test
+    void whenGetCharacters_thenReturnJsonArray() throws Exception {
+        mock.perform(get("/api/v1/character")).andExpect(status().isOk())
+                .andExpect(jsonPath("$[*]", hasSize(1)));
+    }
+
+    @Test
+    void whenGetCharacters_thenReturnEmptyArray() throws Exception {
+        characterRepository.deleteAll();
+
+        mock.perform(get("/api/v1/character")).andExpect(status().isOk())
+                .andExpect(jsonPath("$[*]", hasSize(0)));
+    }
+
+    @Test
+    void whenGetCharacters_withParameter_thenReturnJsonArray() throws Exception {
+        mock.perform(get("/api/v1/character").queryParams(createMappingParameterMulti())).andExpect(status().isOk())
+                .andExpect(jsonPath("$[*]", hasSize(1)));
+    }
+
+    @Test
+    void whenGetCharacters_withParameter_thenReturnEmptyArray() throws Exception {
+        characterRepository.deleteAll();
+
+        mock.perform(get("/api/v1/character").queryParams(createMappingParameterMulti())).andExpect(status().isOk())
+                .andExpect(jsonPath("$[*]", hasSize(0)));
+    }
+
+    @Test
+    void whenGetCharacter_thenReturnCharacter() throws Exception {
+        long id = characterRepository.findAll().get(0).getId();
+
+        mock.perform(get("/api/v1/character/" + id)).andExpect(status().isOk())
+                .andExpect((jsonPath("$.name", is(createCharacterSchool().getName()))));
+    }
+
+    @Test
+    void whenGetCharacter_thenReturnCharacterNotFoundException() throws Exception {
+        mock.perform(get("/api/v1/character/" + Long.MAX_VALUE)).andExpect(status().isNotFound());
+    }
+
+    @Test
+    void whenPostCharacter_thenReturnCharacter() throws Exception {
+
+        mock.perform(post("/api/v1/character")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(createCharacterSchoolRequestCorrect())))
+                .andExpect(status().isCreated())
+                .andExpect((jsonPath("$.name", is(createCharacterSchoolRequestCorrect().getName()))));
+    }
+
+    @Test
+    void whenPostCharacter_WithSchoolWrong_thenNotFoundException() throws Exception {
+        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        characterSchoolRequest.setName("Harry Potter");
+        characterSchoolRequest.setRole("student");
+        characterSchoolRequest.setSchool("test");
+        characterSchoolRequest.setHouse("1760529f-6d51-4cb1-bcb1-25087fce5bde");
+        characterSchoolRequest.setPatronus("stag");
+
+        mock.perform(post("/api/v1/character")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(characterSchoolRequest)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void whenPostCharacter_WithHouseWrong_thenNotFoundException() throws Exception {
+        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        characterSchoolRequest.setName("Harry Potter");
+        characterSchoolRequest.setRole("student");
+        characterSchoolRequest.setSchool("Hogwarts School of Witchcraft and Wizardry");
+        characterSchoolRequest.setHouse("test");
+        characterSchoolRequest.setPatronus("stag");
+
+        mock.perform(post("/api/v1/character")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(characterSchoolRequest)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void whenPutCharacter_thenReturnCharacter() throws Exception {
+        long id = characterRepository.findAll().get(0).getId();
+
+        mock.perform(put("/api/v1/character/" + id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(createCharacterSchoolRequestCorrect())))
+                .andExpect(status().isOk())
+                .andExpect((jsonPath("$.name", is(createCharacterSchoolRequestCorrect().getName()))));
+    }
+
+    @Test
+    void whenPutCharacter_WithSchoolWrong_thenNotFoundException() throws Exception {
+        long id = characterRepository.findAll().get(0).getId();
+
+        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        characterSchoolRequest.setName("Harry Potter");
+        characterSchoolRequest.setRole("student");
+        characterSchoolRequest.setSchool("test");
+        characterSchoolRequest.setHouse("1760529f-6d51-4cb1-bcb1-25087fce5bde");
+        characterSchoolRequest.setPatronus("stag");
+
+        mock.perform(put("/api/v1/character/" + id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(characterSchoolRequest)))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void whenPutCharacter_WithHouseWrong_thenNotFoundException() throws Exception {
+        long id = characterRepository.findAll().get(0).getId();
+
+        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        characterSchoolRequest.setName("Harry Potter");
+        characterSchoolRequest.setRole("student");
+        characterSchoolRequest.setSchool("Hogwarts School of Witchcraft and Wizardry");
+        characterSchoolRequest.setHouse("test");
+        characterSchoolRequest.setPatronus("stag");
+
+        mock.perform(put("/api/v1/character/" + id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(createCharacterSchoolRequest())))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void whenDeleteCharacter_thenReturnSuccess() throws Exception {
+        long id = characterRepository.findAll().get(0).getId();
+
+        mock.perform(delete("/api/v1/character/" + id)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(createCharacterSchoolRequest())))
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void whenDeleteCharacter_thenReturnCharactersNotFoundException() throws Exception {
+
+        mock.perform(delete("/api/v1/character/" + Long.MAX_VALUE)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(createCharacterSchool())))
+                .andExpect(status().isNotFound());
+    }
+
+    @AfterEach
+    public void finalizedTest() {
+        characterRepository.deleteAll();
+        jedis.flushAll();
+    }
 }

@@ -1,5 +1,7 @@
 package br.com.makemagictest.util;
 
+import org.springframework.util.ObjectUtils;
+
 import br.com.makemagictest.dto.CharacterSchoolRequest;
 import br.com.makemagictest.dto.PotterApi;
 import br.com.makemagictest.error.CharacterSchoolNotFoundException;
@@ -19,7 +21,7 @@ public class Util {
             throw new CharacterSchoolNotFoundException(HOUSE, characterSchoolRequest.getHouse());
         }
 
-        boolean isSchool = potterApi.getHouses().stream().anyMatch(house -> house.getSchool().equals(characterSchoolRequest.getSchool()));
+        boolean isSchool = potterApi.getHouses().stream().anyMatch(house -> !ObjectUtils.isEmpty(house.getSchool()) && house.getSchool().equals(characterSchoolRequest.getSchool()));
 
         if (!isSchool) {
             throw new CharacterSchoolNotFoundException(SCHOOL, characterSchoolRequest.getHouse());

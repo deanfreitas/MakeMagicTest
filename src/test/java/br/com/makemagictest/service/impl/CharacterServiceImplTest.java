@@ -156,6 +156,36 @@ public class CharacterServiceImplTest {
         characterService.saveCharacter(characterSchoolRequest);
     }
 
+    @Test(expected = CharacterSchoolNotFoundException.class)
+    public void testSaveCharacter_wrongSchoolPotterApi_thenNotFoundException() {
+
+        List<String> stringList = Collections.singletonList("String Test");
+        String stringValue = "String Test";
+        String stringValueError = "Error";
+
+        House house = new House();
+        house.setId(stringValue);
+        house.setName(stringValue);
+        house.setHeadOfHouse(stringValue);
+        house.setValues(stringList);
+        house.setColors(stringList);
+        house.setSchool(stringValueError);
+        house.setMascot(stringValue);
+        house.setHouseGhost(stringValue);
+        house.setFounder(stringValue);
+
+        PotterApi potterApi = new PotterApi();
+        potterApi.setHouses(Collections.singletonList(house));
+
+        CharacterSchoolRequest characterSchoolRequest = createCharacterSchoolRequest();
+
+        Mockito.when(potterApiService.getHouses()).thenReturn(potterApi);
+
+        CharacterSchool character = characterService.saveCharacter(characterSchoolRequest);
+
+        assertEquals(characterSchoolRequest.getName(), character.getName());
+    }
+
     @Test
     public void testUpdateCharacter_thenOK() {
 

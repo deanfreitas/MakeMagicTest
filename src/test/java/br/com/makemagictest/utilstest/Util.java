@@ -5,6 +5,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.makemagictest.dto.CharacterSchoolRequest;
@@ -26,6 +29,18 @@ public class Util {
         characterSchoolRequest.setSchool(stringValue);
         characterSchoolRequest.setHouse(stringValue);
         characterSchoolRequest.setPatronus(stringValue);
+
+        return characterSchoolRequest;
+    }
+
+    public static CharacterSchoolRequest createCharacterSchoolRequestCorrect() {
+        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+
+        characterSchoolRequest.setName("Harry Potter");
+        characterSchoolRequest.setRole("student");
+        characterSchoolRequest.setSchool("Hogwarts School of Witchcraft and Wizardry");
+        characterSchoolRequest.setHouse("1760529f-6d51-4cb1-bcb1-25087fce5bde");
+        characterSchoolRequest.setPatronus("stag");
 
         return characterSchoolRequest;
     }
@@ -77,6 +92,43 @@ public class Util {
         allParams.put("role", stringValue);
 
         return allParams;
+    }
+
+    public static MultiValueMap<String, String> createMappingParameterMulti() {
+        MultiValueMap<String, String> allParams = new LinkedMultiValueMap<>();
+        allParams.put("house", Collections.singletonList(stringValue));
+        allParams.put("role", Collections.singletonList(stringValue));
+
+        return allParams;
+    }
+
+    public static String createPotterApiString() {
+        PotterApi potterApi = createPotterApi();
+        House house = potterApi.getHouses().get(0);
+
+        return "{\n" +
+                "    \"houses\": [\n" +
+                "        {\n" +
+                "            \"school\": \"" + house.getSchool() + "\",\n" +
+                "            \"values\": [\n" +
+                "                \"courage\",\n" +
+                "                \"bravery\",\n" +
+                "                \"nerve\",\n" +
+                "                \"chivalry\"\n" +
+                "            ],\n" +
+                "            \"houseGhost\": \"" + house.getHouseGhost() + "\",\n" +
+                "            \"id\": \"" + house.getId() + "\",\n" +
+                "            \"name\": \"" + house.getName() + "\",\n" +
+                "            \"headOfHouse\": \"" + house.getHeadOfHouse() + "\",\n" +
+                "            \"founder\": \"" + house.getFounder() + "\",\n" +
+                "            \"mascot\": \"" + house.getMascot() + "\",\n" +
+                "            \"colors\": [\n" +
+                "                \"scarlet\",\n" +
+                "                \"gold\"\n" +
+                "            ]\n" +
+                "        }\n" +
+                "    ]\n" +
+                "}";
     }
 
     public static String asJsonString(final Object obj) {

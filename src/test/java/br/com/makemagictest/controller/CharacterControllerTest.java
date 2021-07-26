@@ -2,6 +2,7 @@ package br.com.makemagictest.controller;
 
 import static br.com.makemagictest.utilstest.Util.asJsonString;
 import static br.com.makemagictest.utilstest.Util.createCharacterSchool;
+import static br.com.makemagictest.utilstest.Util.createCharacterSchoolRequest;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
@@ -76,7 +77,7 @@ public class CharacterControllerTest {
         when(characterService.saveCharacter(any(CharacterSchoolRequest.class))).thenReturn(createCharacterSchool());
         mock.perform(post("/api/v1/character")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(createCharacterSchool())))
+                .content(asJsonString(createCharacterSchoolRequest())))
                 .andExpect(status().isCreated())
                 .andExpect((jsonPath("$.name", is(createCharacterSchool().getName()))));
     }
@@ -87,7 +88,7 @@ public class CharacterControllerTest {
 
         mock.perform(put("/api/v1/character/" + longValue)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(createCharacterSchool())))
+                .content(asJsonString(createCharacterSchoolRequest())))
                 .andExpect(status().isOk())
                 .andExpect((jsonPath("$.name", is(createCharacterSchool().getName()))));
     }
@@ -98,7 +99,7 @@ public class CharacterControllerTest {
 
         mock.perform(put("/api/v1/character/" + longValue)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(createCharacterSchool())))
+                .content(asJsonString(createCharacterSchoolRequest())))
                 .andExpect(status().isNotFound());
     }
 
@@ -108,7 +109,7 @@ public class CharacterControllerTest {
 
         mock.perform(delete("/api/v1/character/" + longValue)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(createCharacterSchool())))
+                .content(asJsonString(createCharacterSchoolRequest())))
                 .andExpect(status().isNoContent());
     }
 
