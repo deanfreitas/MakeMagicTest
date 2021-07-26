@@ -21,7 +21,7 @@ import lombok.ToString;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "character_school", schema = "makemagictest")
+@Table(name = "character_school")
 public class CharacterSchool implements Serializable {
 
     @Id

@@ -1,0 +1,81 @@
+package br.com.makemagictest.repository;
+
+import static br.com.makemagictest.utilstest.Util.createCharacterSchool;
+import static br.com.makemagictest.utilstest.Util.createCharacterSchoolRepository;
+import static br.com.makemagictest.utilstest.Util.createMappingParameter;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
+import java.util.List;
+import java.util.Optional;
+
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import br.com.makemagictest.repository.model.CharacterSchool;
+
+@RunWith(SpringRunner.class)
+@DataJpaTest
+public class CharacterSchoolRepositoryTests {
+
+    @Autowired
+    private CharacterRepository characterRepository;
+
+    @Before
+    public void prepareToTests() {
+        characterRepository.save(createCharacterSchool());
+    }
+
+    @Test
+    public void testGetAllUser_whenGetEntity_thenOK() {
+        characterRepository.save(createCharacterSchoolRepository());
+        assertEquals(2, characterRepository.findAll().size());
+    }
+
+    @Test
+    public void testGetUser_whenGetEntity_thenOK() {
+        long id = 1;
+        Optional<CharacterSchool> characterSchool = characterRepository.findById(id);
+        assertNotNull(characterSchool);
+    }
+
+    @Test
+    public void testGetUser_whenGetEntity_thenNullFound() {
+        long id = 80;
+        Optional<CharacterSchool> characterSchool = characterRepository.findById(id);
+        assertNotNull(characterSchool);
+    }
+
+    @Test
+    public void testGetUser_whenGetEntityWithParameter_thenNullFound() {
+        List<CharacterSchool> characterByQueryParameter = characterRepository.findCharacterByQueryParameter(createMappingParameter());
+        assertNotNull(characterByQueryParameter);
+    }
+
+    @Test
+    public void testSaveUser_whenSaveEntity_thenOK() {
+        CharacterSchool school = createCharacterSchool();
+
+        CharacterSchool characterSchool = characterRepository.save(school);
+        assertEquals(characterSchool.getHouse(), school.getHouse());
+    }
+
+    @Test
+    public void testDeleteUser_whenDeleteEntity_thenOK() {
+        CharacterSchool characterSchool = characterRepository.findAll().stream().findFirst().orElseThrow(RuntimeException::new);
+        characterRepository.delete(characterSchool);
+
+        assertNull(characterRepository.findById(characterSchool.getId()).orElse(null));
+    }
+
+    @After
+    public void finalizedTest() {
+        characterRepository.deleteAll();
+    }
+}
