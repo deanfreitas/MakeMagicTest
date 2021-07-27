@@ -16,10 +16,9 @@ public class JsonUtilTest {
 
     @Test()
     public void testJsonToObject_thenOK() {
-        PotterApi potterApi = createPotterApi();
-        String returnService = createPotterApiString();
-
-        PotterApi potterApiReturn = JsonUtil.jsonToObject(returnService, PotterApi.class);
+        var potterApi = createPotterApi();
+        var returnService = createPotterApiString();
+        var potterApiReturn = JsonUtil.jsonToObject(returnService, PotterApi.class);
 
         assertEquals(potterApi.getHouses().get(0).getSchool(), potterApiReturn.getHouses().get(0).getSchool());
     }

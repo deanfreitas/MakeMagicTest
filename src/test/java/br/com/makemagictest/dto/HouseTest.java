@@ -14,9 +14,10 @@ public class HouseTest {
 
     @Test
     public void testGetAndSet() {
+        var stringValue = "String Test";
+        var message = "Ok";
+
         List<String> stringList = Collections.emptyList();
-        String stringValue = "String Test";
-        String message = "Ok";
 
         House house = new House();
         house.setId(stringValue);

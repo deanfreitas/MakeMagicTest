@@ -110,7 +110,7 @@ class MakeMagicTestApplicationTests {
 
     @Test
     void whenGetCharacter_thenReturnCharacter() throws Exception {
-        long id = characterRepository.findAll().get(0).getId();
+        var id = characterRepository.findAll().get(0).getId();
 
         mock.perform(get(URI + id)).andExpect(status().isOk())
                 .andExpect((jsonPath("$.name", is(createCharacterSchool().getName()))));
@@ -133,7 +133,7 @@ class MakeMagicTestApplicationTests {
 
     @Test
     void whenPostCharacter_WithSchoolWrong_thenNotFoundException() throws Exception {
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
         characterSchoolRequest.setName("Harry Potter");
         characterSchoolRequest.setRole("student");
         characterSchoolRequest.setSchool("test");
@@ -148,7 +148,7 @@ class MakeMagicTestApplicationTests {
 
     @Test
     void whenPostCharacter_WithHouseWrong_thenNotFoundException() throws Exception {
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
         characterSchoolRequest.setName("Harry Potter");
         characterSchoolRequest.setRole("student");
         characterSchoolRequest.setSchool("Hogwarts School of Witchcraft and Wizardry");
@@ -163,7 +163,7 @@ class MakeMagicTestApplicationTests {
 
     @Test
     void whenPostCharacter_withoutName_thenReturnCharacter() throws Exception {
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
 
         characterSchoolRequest.setRole("student");
         characterSchoolRequest.setSchool("Hogwarts School of Witchcraft and Wizardry");
@@ -178,7 +178,7 @@ class MakeMagicTestApplicationTests {
 
     @Test
     void whenPostCharacter_withoutRole_thenReturnCharacter() throws Exception {
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
 
         characterSchoolRequest.setName("Harry Potter");
         characterSchoolRequest.setSchool("Hogwarts School of Witchcraft and Wizardry");
@@ -193,7 +193,7 @@ class MakeMagicTestApplicationTests {
 
     @Test
     void whenPostCharacter_withoutSchool_thenReturnCharacter() throws Exception {
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
 
         characterSchoolRequest.setName("Harry Potter");
         characterSchoolRequest.setRole("student");
@@ -208,7 +208,7 @@ class MakeMagicTestApplicationTests {
 
     @Test
     void whenPostCharacter_withoutHouse_thenReturnCharacter() throws Exception {
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
 
         characterSchoolRequest.setName("Harry Potter");
         characterSchoolRequest.setRole("student");
@@ -223,7 +223,7 @@ class MakeMagicTestApplicationTests {
 
     @Test
     void whenPostCharacter_withoutPatronus_thenReturnCharacter() throws Exception {
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
 
         characterSchoolRequest.setName("Harry Potter");
         characterSchoolRequest.setRole("student");
@@ -238,7 +238,7 @@ class MakeMagicTestApplicationTests {
 
     @Test
     void whenPutCharacter_thenReturnCharacter() throws Exception {
-        long id = characterRepository.findAll().get(0).getId();
+        var id = characterRepository.findAll().get(0).getId();
 
         mock.perform(put(URI + id)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -249,7 +249,7 @@ class MakeMagicTestApplicationTests {
 
     @Test
     void whenPutCharacter_WithSchoolWrong_thenNotFoundException() throws Exception {
-        long id = characterRepository.findAll().get(0).getId();
+        var id = characterRepository.findAll().get(0).getId();
 
         CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
         characterSchoolRequest.setName("Harry Potter");
@@ -266,9 +266,9 @@ class MakeMagicTestApplicationTests {
 
     @Test
     void whenPutCharacter_WithHouseWrong_thenNotFoundException() throws Exception {
-        long id = characterRepository.findAll().get(0).getId();
+        var id = characterRepository.findAll().get(0).getId();
 
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
         characterSchoolRequest.setName("Harry Potter");
         characterSchoolRequest.setRole("student");
         characterSchoolRequest.setSchool("Hogwarts School of Witchcraft and Wizardry");
@@ -283,7 +283,7 @@ class MakeMagicTestApplicationTests {
 
     @Test
     void whenDeleteCharacter_thenReturnSuccess() throws Exception {
-        long id = characterRepository.findAll().get(0).getId();
+        var id = characterRepository.findAll().get(0).getId();
 
         mock.perform(delete(URI + id)
                 .contentType(MediaType.APPLICATION_JSON)

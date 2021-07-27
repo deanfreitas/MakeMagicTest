@@ -6,11 +6,7 @@ import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
 
 import org.springframework.stereotype.Repository;
 
@@ -26,19 +22,19 @@ public class CharacterRepositoryCustomImpl implements CharacterRepositoryCustom 
     @Override
     public List<CharacterSchool> findCharacterByQueryParameter(Map<String, ?> allParams) {
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-        CriteriaQuery<CharacterSchool> criteriaQuery = criteriaBuilder.createQuery(CharacterSchool.class);
-        Root<CharacterSchool> characterSchoolRoot = criteriaQuery.from(CharacterSchool.class);
+        var criteriaBuilder = entityManager.getCriteriaBuilder();
+        var criteriaQuery = criteriaBuilder.createQuery(CharacterSchool.class);
+        var characterSchoolRoot = criteriaQuery.from(CharacterSchool.class);
 
-        List<Predicate> predicates = new ArrayList<>();
+        List<Predicate> predicates = new ArrayList<Predicate>();
 
-        for (Map.Entry<String, ?> entry : allParams.entrySet()) {
-            Predicate predicate = criteriaBuilder.equal(characterSchoolRoot.get(entry.getKey()), entry.getValue());
+        for (var entry : allParams.entrySet()) {
+            var predicate = criteriaBuilder.equal(characterSchoolRoot.get(entry.getKey()), entry.getValue());
             predicates.add(predicate);
         }
 
         criteriaQuery.where(predicates.toArray(new Predicate[0]));
-        TypedQuery<CharacterSchool> query = entityManager.createQuery(criteriaQuery);
+        var query = entityManager.createQuery(criteriaQuery);
 
         return query.getResultList();
     }

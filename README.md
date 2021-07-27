@@ -3,7 +3,7 @@
 ## Fazer o Download e instalar as feramentas
 
 - Git
-- Java
+- Java (11 or +)
 - Maven
 - Docker
 

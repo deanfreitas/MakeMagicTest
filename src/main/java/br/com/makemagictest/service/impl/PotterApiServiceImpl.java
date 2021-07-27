@@ -2,7 +2,6 @@ package br.com.makemagictest.service.impl;
 
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.RequestEntity;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -21,11 +20,11 @@ public class PotterApiServiceImpl implements PotterApiService {
 
     @Cacheable(value = "houses")
     public PotterApi getHouses() {
-        String uri = "https://us-central1-rh-challenges.cloudfunctions.net/potterApi/houses";
-        String apikey = "ea665e06-e977-4b9b-81cb-a92d5b212822";
+        var uri = "https://us-central1-rh-challenges.cloudfunctions.net/potterApi/houses";
+        var apikey = "ea665e06-e977-4b9b-81cb-a92d5b212822";
 
-        RequestEntity<Void> request = RequestEntity.get(uri).header(APIKEY, apikey).build();
-        ResponseEntity<String> response = restTemplate.exchange(request, String.class);
+        var request = RequestEntity.get(uri).header(APIKEY, apikey).build();
+        var response = restTemplate.exchange(request, String.class);
 
         return JsonUtil.jsonToObject(response.getBody(), PotterApi.class);
     }

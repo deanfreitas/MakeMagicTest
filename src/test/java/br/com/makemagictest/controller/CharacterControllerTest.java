@@ -85,7 +85,7 @@ public class CharacterControllerTest {
 
     @Test
     public void whenPostCharacter_withoutName_thenReturnCharacter() throws Exception {
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
 
         characterSchoolRequest.setRole("student");
         characterSchoolRequest.setSchool("Hogwarts School of Witchcraft and Wizardry");
@@ -100,7 +100,7 @@ public class CharacterControllerTest {
 
     @Test
     public void whenPostCharacter_withoutRole_thenReturnCharacter() throws Exception {
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
 
         characterSchoolRequest.setName("Harry Potter");
         characterSchoolRequest.setSchool("Hogwarts School of Witchcraft and Wizardry");
@@ -115,7 +115,7 @@ public class CharacterControllerTest {
 
     @Test
     public void whenPostCharacter_withoutSchool_thenReturnCharacter() throws Exception {
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
 
         characterSchoolRequest.setName("Harry Potter");
         characterSchoolRequest.setRole("student");
@@ -130,7 +130,7 @@ public class CharacterControllerTest {
 
     @Test
     public void whenPostCharacter_withoutHouse_thenReturnCharacter() throws Exception {
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
 
         characterSchoolRequest.setName("Harry Potter");
         characterSchoolRequest.setRole("student");
@@ -145,7 +145,7 @@ public class CharacterControllerTest {
 
     @Test
     public void whenPostCharacter_withoutPatronus_thenReturnCharacter() throws Exception {
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
 
         characterSchoolRequest.setName("Harry Potter");
         characterSchoolRequest.setRole("student");

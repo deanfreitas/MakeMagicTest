@@ -29,8 +29,8 @@ public class PotterApiServiceImplTest {
     @Test
     public void testGetHouses_thenOK() {
 
-        PotterApi potterApi = createPotterApi();
-        String returnService = createPotterApiString();
+        var potterApi = createPotterApi();
+        var returnService = createPotterApiString();
 
         Mockito.when(restTemplate.exchange(Mockito.any(), Mockito.any(Class.class))).thenReturn(new ResponseEntity(returnService, HttpStatus.OK));
         PotterApi potterApiResponse = potterApiService.getHouses();

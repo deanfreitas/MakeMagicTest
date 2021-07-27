@@ -16,7 +16,7 @@ public class PotterApiTest {
     public void testGetAndSet() {
         List<House> houseList = Collections.emptyList();
 
-        PotterApi potterApi = new PotterApi();
+        var potterApi = new PotterApi();
         potterApi.setHouses(houseList);
 
         assertEquals("Ok", houseList, potterApi.getHouses());

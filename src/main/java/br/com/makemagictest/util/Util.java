@@ -15,13 +15,13 @@ public class Util {
     }
 
     public static void checkCharacterSchool(PotterApi potterApi, CharacterSchoolRequest characterSchoolRequest) {
-        boolean isHouse = potterApi.getHouses().stream().anyMatch(house -> house.getId().equals(characterSchoolRequest.getHouse()));
+        var isHouse = potterApi.getHouses().stream().anyMatch(house -> house.getId().equals(characterSchoolRequest.getHouse()));
 
         if (!isHouse) {
             throw new CharacterSchoolNotFoundException(HOUSE, characterSchoolRequest.getHouse());
         }
 
-        boolean isSchool = potterApi.getHouses().stream().anyMatch(house -> !ObjectUtils.isEmpty(house.getSchool()) && house.getSchool().equals(characterSchoolRequest.getSchool()));
+        var isSchool = potterApi.getHouses().stream().anyMatch(house -> !ObjectUtils.isEmpty(house.getSchool()) && house.getSchool().equals(characterSchoolRequest.getSchool()));
 
         if (!isSchool) {
             throw new CharacterSchoolNotFoundException(SCHOOL, characterSchoolRequest.getHouse());

@@ -14,13 +14,13 @@ public class CharacterSchoolNotFoundExceptionTest {
 
     @Test()
     public void testCharacterSchoolNotFoundException_withCharacter_thenOK() {
-        CharacterSchoolNotFoundException characterSchoolNotFoundException = new CharacterSchoolNotFoundException(Long.MAX_VALUE);
+        var characterSchoolNotFoundException = new CharacterSchoolNotFoundException(Long.MAX_VALUE);
         Assertions.assertTrue(characterSchoolNotFoundException.getMessage().contains(String.valueOf(longValue)));
     }
 
     @Test()
     public void testCharacterSchoolNotFoundException_withFieldAndHouse_thenOK() {
-        CharacterSchoolNotFoundException characterSchoolNotFoundException = new CharacterSchoolNotFoundException(stringValue, stringValue);
+        var characterSchoolNotFoundException = new CharacterSchoolNotFoundException(stringValue, stringValue);
         Assertions.assertTrue(characterSchoolNotFoundException.getMessage().contains(stringValue));
     }
 }

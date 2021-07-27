@@ -9,7 +9,6 @@ import static org.mockito.Mockito.times;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,12 +17,10 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import br.com.makemagictest.dto.CharacterSchoolRequest;
 import br.com.makemagictest.dto.House;
 import br.com.makemagictest.dto.PotterApi;
 import br.com.makemagictest.error.CharacterSchoolNotFoundException;
 import br.com.makemagictest.repository.CharacterRepository;
-import br.com.makemagictest.repository.model.CharacterSchool;
 import br.com.makemagictest.service.PotterApiService;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -40,11 +37,11 @@ public class CharacterServiceImplTest {
     @Test
     public void testGetAllCharacters_withoutParameter_thenOK() {
 
-        CharacterSchool characterSchool = createCharacterSchool();
+        var characterSchool = createCharacterSchool();
 
         Mockito.when(characterRepository.findAll()).thenReturn(Collections.singletonList(characterSchool));
 
-        List<CharacterSchool> allCharacters = characterService.getAllCharacters(null);
+        var allCharacters = characterService.getAllCharacters(null);
 
         assertEquals(characterSchool.getId(), allCharacters.get(0).getId());
     }
@@ -52,12 +49,12 @@ public class CharacterServiceImplTest {
     @Test
     public void testGetAllCharacters_withParameter_thenOK() {
 
-        CharacterSchool characterSchool = createCharacterSchool();
-        Map<String, String> allParams = createMappingParameter();
+        var characterSchool = createCharacterSchool();
+        var allParams = createMappingParameter();
 
         Mockito.when(characterRepository.findCharacterByQueryParameter(allParams)).thenReturn(Collections.singletonList(characterSchool));
 
-        List<CharacterSchool> allCharacters = characterService.getAllCharacters(allParams);
+        var allCharacters = characterService.getAllCharacters(allParams);
 
         assertEquals(characterSchool.getId(), allCharacters.get(0).getId());
     }
@@ -65,11 +62,11 @@ public class CharacterServiceImplTest {
     @Test
     public void testGetCharacter_thenOK() {
 
-        CharacterSchool characterSchool = createCharacterSchool();
+        var characterSchool = createCharacterSchool();
 
         Mockito.when(characterRepository.findById(longValue)).thenReturn(java.util.Optional.of(characterSchool));
 
-        CharacterSchool character = characterService.getCharacter(longValue);
+        var character = characterService.getCharacter(longValue);
 
         assertEquals(characterSchool.getId(), character.getId());
     }
@@ -85,14 +82,14 @@ public class CharacterServiceImplTest {
     @Test
     public void testSaveCharacter_thenOK() {
 
-        PotterApi potterApi = createPotterApi();
-        CharacterSchoolRequest characterSchoolRequest = createCharacterSchoolRequest();
-        CharacterSchool characterSchool = createCharacterSchool();
+        var potterApi = createPotterApi();
+        var characterSchoolRequest = createCharacterSchoolRequest();
+        var characterSchool = createCharacterSchool();
 
         Mockito.when(potterApiService.getHouses()).thenReturn(potterApi);
         Mockito.when(characterRepository.save(Mockito.any())).thenReturn(characterSchool);
 
-        CharacterSchool character = characterService.saveCharacter(characterSchoolRequest);
+        var character = characterService.saveCharacter(characterSchoolRequest);
 
         assertEquals(characterSchoolRequest.getName(), character.getName());
     }
@@ -101,10 +98,10 @@ public class CharacterServiceImplTest {
     public void testSaveCharacter_wrongHouse_thenNotFoundException() {
 
         List<String> stringList = Collections.singletonList("String Test");
-        String stringValue = "String Test";
-        String stringValueError = "Error";
+        var stringValue = "String Test";
+        var stringValueError = "Error";
 
-        House house = new House();
+        var house = new House();
         house.setId(stringValueError);
         house.setName(stringValue);
         house.setHeadOfHouse(stringValue);
@@ -115,10 +112,10 @@ public class CharacterServiceImplTest {
         house.setHouseGhost(stringValue);
         house.setFounder(stringValue);
 
-        PotterApi potterApi = new PotterApi();
+        var potterApi = new PotterApi();
         potterApi.setHouses(Collections.singletonList(house));
 
-        CharacterSchoolRequest characterSchoolRequest = createCharacterSchoolRequest();
+        var characterSchoolRequest = createCharacterSchoolRequest();
 
         Mockito.when(potterApiService.getHouses()).thenReturn(potterApi);
 
@@ -129,10 +126,10 @@ public class CharacterServiceImplTest {
     public void testSaveCharacter_wrongSchool_thenNotFoundException() {
 
         List<String> stringList = Collections.singletonList("String Test");
-        String stringValue = "String Test";
-        String stringValueError = "Error";
+        var stringValue = "String Test";
+        var stringValueError = "Error";
 
-        House house = new House();
+        var house = new House();
         house.setId(stringValue);
         house.setName(stringValue);
         house.setHeadOfHouse(stringValue);
@@ -143,10 +140,10 @@ public class CharacterServiceImplTest {
         house.setHouseGhost(stringValue);
         house.setFounder(stringValue);
 
-        PotterApi potterApi = new PotterApi();
+        var potterApi = new PotterApi();
         potterApi.setHouses(Collections.singletonList(house));
 
-        CharacterSchoolRequest characterSchoolRequest = createCharacterSchoolRequest();
+        var characterSchoolRequest = createCharacterSchoolRequest();
 
         Mockito.when(potterApiService.getHouses()).thenReturn(potterApi);
 
@@ -157,10 +154,10 @@ public class CharacterServiceImplTest {
     public void testSaveCharacter_wrongSchoolPotterApi_thenNotFoundException() {
 
         List<String> stringList = Collections.singletonList("String Test");
-        String stringValue = "String Test";
-        String stringValueError = "Error";
+        var stringValue = "String Test";
+        var stringValueError = "Error";
 
-        House house = new House();
+        var house = new House();
         house.setId(stringValue);
         house.setName(stringValue);
         house.setHeadOfHouse(stringValue);
@@ -171,10 +168,10 @@ public class CharacterServiceImplTest {
         house.setHouseGhost(stringValue);
         house.setFounder(stringValue);
 
-        PotterApi potterApi = new PotterApi();
+        var potterApi = new PotterApi();
         potterApi.setHouses(Collections.singletonList(house));
 
-        CharacterSchoolRequest characterSchoolRequest = createCharacterSchoolRequest();
+        var characterSchoolRequest = createCharacterSchoolRequest();
 
         Mockito.when(potterApiService.getHouses()).thenReturn(potterApi);
 
@@ -184,17 +181,15 @@ public class CharacterServiceImplTest {
     @Test
     public void testUpdateCharacter_thenOK() {
 
-        PotterApi potterApi = createPotterApi();
-
-        CharacterSchoolRequest characterSchoolRequest = createCharacterSchoolRequest();
-
-        CharacterSchool characterSchool = createCharacterSchool();
+        var potterApi = createPotterApi();
+        var characterSchoolRequest = createCharacterSchoolRequest();
+        var characterSchool = createCharacterSchool();
 
         Mockito.when(characterRepository.findById(longValue)).thenReturn(java.util.Optional.of(characterSchool));
         Mockito.when(potterApiService.getHouses()).thenReturn(potterApi);
         Mockito.when(characterRepository.save(Mockito.any())).thenReturn(characterSchool);
 
-        CharacterSchool character = characterService.updateCharacter(longValue, characterSchoolRequest);
+        var character = characterService.updateCharacter(longValue, characterSchoolRequest);
 
         assertEquals(characterSchoolRequest.getName(), character.getName());
     }
@@ -202,7 +197,7 @@ public class CharacterServiceImplTest {
     @Test(expected = CharacterSchoolNotFoundException.class)
     public void testUpdateCharacter_withCharacterFalse_thenNotFoundException() {
 
-        CharacterSchoolRequest characterSchoolRequest = createCharacterSchoolRequest();
+        var characterSchoolRequest = createCharacterSchoolRequest();
 
         Mockito.when(characterRepository.findById(longValue)).thenThrow(new CharacterSchoolNotFoundException(longValue));
         characterService.updateCharacter(longValue, characterSchoolRequest);
@@ -211,7 +206,7 @@ public class CharacterServiceImplTest {
     @Test
     public void testDeleteCharacter_thenOK() {
 
-        CharacterSchool characterSchool = createCharacterSchool();
+        var characterSchool = createCharacterSchool();
 
         Mockito.when(characterRepository.findById(longValue)).thenReturn(java.util.Optional.of(characterSchool));
         Mockito.doNothing().when(characterRepository).delete(Mockito.any());

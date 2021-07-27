@@ -5,8 +5,6 @@ import static br.com.makemagictest.utilstest.Util.createMappingParameter;
 import static org.junit.Assert.assertEquals;
 
 import java.util.Collections;
-import java.util.List;
-import java.util.Map;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -46,8 +44,8 @@ public class CharacterRepositoryCustomImplTest {
 
     @Test
     public void testFindCharacterByQueryParameter_thenOK() {
-        Map<String, String> mappingParameter = createMappingParameter();
-        CharacterSchool characterSchool = createCharacterSchool();
+        var mappingParameter = createMappingParameter();
+        var characterSchool = createCharacterSchool();
 
         Mockito.when(entityManager.getCriteriaBuilder()).thenReturn(criteriaBuilder);
         Mockito.when(criteriaBuilder.createQuery(CharacterSchool.class)).thenReturn(criteriaQuery);
@@ -55,7 +53,7 @@ public class CharacterRepositoryCustomImplTest {
         Mockito.when(entityManager.createQuery(criteriaQuery)).thenReturn(query);
         Mockito.when(query.getResultList()).thenReturn(Collections.singletonList(characterSchool));
 
-        List<CharacterSchool> characterByQueryParameter = characterRepositoryCustom.findCharacterByQueryParameter(mappingParameter);
+        var characterByQueryParameter = characterRepositoryCustom.findCharacterByQueryParameter(mappingParameter);
         assertEquals(characterByQueryParameter.get(0).getId(), characterSchool.getId());
     }
 }

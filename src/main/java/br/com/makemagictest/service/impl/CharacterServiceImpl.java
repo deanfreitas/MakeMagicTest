@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import br.com.makemagictest.dto.CharacterSchoolRequest;
-import br.com.makemagictest.dto.PotterApi;
 import br.com.makemagictest.error.CharacterSchoolNotFoundException;
 import br.com.makemagictest.repository.CharacterRepository;
 import br.com.makemagictest.repository.model.CharacterSchool;
@@ -47,7 +46,7 @@ public class CharacterServiceImpl implements CharacterService {
     @CacheEvict(value = "characterSchools", allEntries = true)
     @Override
     public CharacterSchool saveCharacter(CharacterSchoolRequest characterSchoolRequest) {
-        PotterApi potterApi = potterApiService.getHouses();
+        var potterApi = potterApiService.getHouses();
 
         checkCharacterSchool(potterApi, characterSchoolRequest);
 
@@ -67,12 +66,12 @@ public class CharacterServiceImpl implements CharacterService {
             evict = {@CacheEvict(value = "characterSchools", allEntries = true)}
     )
     public CharacterSchool updateCharacter(long id, CharacterSchoolRequest characterSchoolRequest) {
-        CharacterSchool characterSchoolEntity = characterRepository.findById(id).orElseThrow(() -> new CharacterSchoolNotFoundException(id));
-        PotterApi potterApi = potterApiService.getHouses();
+        var characterSchoolEntity = characterRepository.findById(id).orElseThrow(() -> new CharacterSchoolNotFoundException(id));
+        var potterApi = potterApiService.getHouses();
 
         checkCharacterSchool(potterApi, characterSchoolRequest);
 
-        CharacterSchool characterSchool = new CharacterSchool();
+        var characterSchool = new CharacterSchool();
         characterSchool.setId(characterSchoolEntity.getId());
         characterSchool.setName(characterSchoolRequest.getName());
         characterSchool.setRole(characterSchoolRequest.getRole());
@@ -89,7 +88,7 @@ public class CharacterServiceImpl implements CharacterService {
                     @CacheEvict(value = "characterSchools", allEntries = true)}
     )
     public void deleteCharacter(long id) {
-        CharacterSchool characterSchoolEntity = characterRepository.findById(id).orElseThrow(() -> new CharacterSchoolNotFoundException(id));
+        var characterSchoolEntity = characterRepository.findById(id).orElseThrow(() -> new CharacterSchoolNotFoundException(id));
         characterRepository.delete(characterSchoolEntity);
     }
 }

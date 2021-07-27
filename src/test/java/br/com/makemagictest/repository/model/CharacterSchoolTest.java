@@ -18,7 +18,7 @@ public class CharacterSchoolTest {
     @Test
     public void testGetAndSet() {
 
-        CharacterSchool characterSchool = createCharacterSchool();
+        var characterSchool = createCharacterSchool();
 
         assertEquals(message, longValue, characterSchool.getId());
         assertEquals(message, stringValue, characterSchool.getName());
@@ -30,7 +30,7 @@ public class CharacterSchoolTest {
 
     @Test
     public void testConstructorAllParameters() {
-        CharacterSchool characterSchool = new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue);
+        var characterSchool = new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue);
 
         assertEquals(message, longValue, characterSchool.getId());
         assertEquals(message, stringValue, characterSchool.getName());
@@ -42,19 +42,22 @@ public class CharacterSchoolTest {
 
     @Test
     public void testToString() {
-        CharacterSchool characterSchool = new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue);
+        var characterSchool = new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue);
         assertTrue(characterSchool.toString().startsWith("CharacterSchool"));
     }
 
     @Test
     public void testEquals() {
-        CharacterSchool characterSchool = new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue);
-        assertEquals(characterSchool, new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue));
+        var characterSchool = new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue);
+        var characterSchoolTest = new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue);
+        assertEquals(characterSchool, characterSchoolTest);
     }
 
     @Test
     public void testHashCode() {
-        CharacterSchool characterSchool = new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue);
-        assertTrue(characterSchool.hashCode() == new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue).hashCode());
+        var characterSchool = new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue);
+        var characterSchoolTest = new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue);
+
+        assertEquals(characterSchool.hashCode(), characterSchoolTest.hashCode());
     }
 }

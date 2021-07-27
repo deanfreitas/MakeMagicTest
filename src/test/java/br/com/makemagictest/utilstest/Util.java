@@ -22,7 +22,7 @@ public class Util {
     private static final long longValue = Long.MAX_VALUE;
 
     public static CharacterSchoolRequest createCharacterSchoolRequest() {
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
 
         characterSchoolRequest.setName(stringValue);
         characterSchoolRequest.setRole(stringValue);
@@ -34,7 +34,7 @@ public class Util {
     }
 
     public static CharacterSchoolRequest createCharacterSchoolRequestCorrect() {
-        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+        var characterSchoolRequest = new CharacterSchoolRequest();
 
         characterSchoolRequest.setName("Harry Potter");
         characterSchoolRequest.setRole("student");
@@ -46,7 +46,7 @@ public class Util {
     }
 
     public static CharacterSchool createCharacterSchool() {
-        CharacterSchool characterSchool = new CharacterSchool();
+        var characterSchool = new CharacterSchool();
         characterSchool.setId(longValue);
         characterSchool.setName(stringValue);
         characterSchool.setRole(stringValue);
@@ -58,7 +58,7 @@ public class Util {
     }
 
     public static CharacterSchool createCharacterSchoolRepository() {
-        CharacterSchool characterSchool = new CharacterSchool();
+        var characterSchool = new CharacterSchool();
         characterSchool.setName(stringValue);
         characterSchool.setRole(stringValue);
         characterSchool.setSchool(stringValue);
@@ -69,7 +69,7 @@ public class Util {
     }
 
     public static PotterApi createPotterApi() {
-        House house = new House();
+        var house = new House();
         house.setId(stringValue);
         house.setName(stringValue);
         house.setHeadOfHouse(stringValue);
@@ -80,14 +80,14 @@ public class Util {
         house.setHouseGhost(stringValue);
         house.setFounder(stringValue);
 
-        PotterApi potterApi = new PotterApi();
+        var potterApi = new PotterApi();
         potterApi.setHouses(Collections.singletonList(house));
 
         return potterApi;
     }
 
     public static Map<String, String> createMappingParameter() {
-        Map<String, String> allParams = new HashMap<>();
+        var allParams = new HashMap<String, String>();
         allParams.put("house", stringValue);
         allParams.put("role", stringValue);
 
@@ -95,7 +95,7 @@ public class Util {
     }
 
     public static MultiValueMap<String, String> createMappingParameterMulti() {
-        MultiValueMap<String, String> allParams = new LinkedMultiValueMap<>();
+        var allParams = new LinkedMultiValueMap<String, String>();
         allParams.put("house", Collections.singletonList(stringValue));
         allParams.put("role", Collections.singletonList(stringValue));
 
@@ -103,8 +103,8 @@ public class Util {
     }
 
     public static String createPotterApiString() {
-        PotterApi potterApi = createPotterApi();
-        House house = potterApi.getHouses().get(0);
+        var potterApi = createPotterApi();
+        var house = potterApi.getHouses().get(0);
 
         return "{\n" +
                 "    \"houses\": [\n" +

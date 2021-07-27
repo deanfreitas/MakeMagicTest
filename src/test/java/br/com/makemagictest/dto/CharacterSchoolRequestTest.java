@@ -12,8 +12,8 @@ public class CharacterSchoolRequestTest {
 
     @Test
     public void testGetAndSet() {
-        String stringValue = "String Test";
-        String message = "Ok";
+        var stringValue = "String Test";
+        var message = "Ok";
 
         CharacterSchoolRequest characterSchoolRequest = createCharacterSchoolRequest();
 
