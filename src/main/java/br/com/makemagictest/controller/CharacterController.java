@@ -3,6 +3,8 @@ package br.com.makemagictest.controller;
 import java.util.List;
 import java.util.Map;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,13 +41,13 @@ public class CharacterController {
 
     @PostMapping("/character")
     @ResponseStatus(HttpStatus.CREATED)
-    public CharacterSchool saveCharacter(@RequestBody CharacterSchoolRequest characterSchoolRequest) {
+    public CharacterSchool saveCharacter(@Valid @RequestBody CharacterSchoolRequest characterSchoolRequest) {
         return characterService.saveCharacter(characterSchoolRequest);
     }
 
     @PutMapping("/character/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CharacterSchool updateCharacter(@PathVariable("id") long id, @RequestBody CharacterSchoolRequest characterSchoolRequest) {
+    public CharacterSchool updateCharacter(@PathVariable("id") long id, @Valid @RequestBody CharacterSchoolRequest characterSchoolRequest) {
         return characterService.updateCharacter(id, characterSchoolRequest);
     }
 

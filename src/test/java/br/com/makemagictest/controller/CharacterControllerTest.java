@@ -84,6 +84,81 @@ public class CharacterControllerTest {
     }
 
     @Test
+    public void whenPostCharacter_withoutName_thenReturnCharacter() throws Exception {
+        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+
+        characterSchoolRequest.setRole("student");
+        characterSchoolRequest.setSchool("Hogwarts School of Witchcraft and Wizardry");
+        characterSchoolRequest.setHouse("1760529f-6d51-4cb1-bcb1-25087fce5bde");
+        characterSchoolRequest.setPatronus("stag");
+
+        mock.perform(post(URI)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(characterSchoolRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void whenPostCharacter_withoutRole_thenReturnCharacter() throws Exception {
+        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+
+        characterSchoolRequest.setName("Harry Potter");
+        characterSchoolRequest.setSchool("Hogwarts School of Witchcraft and Wizardry");
+        characterSchoolRequest.setHouse("1760529f-6d51-4cb1-bcb1-25087fce5bde");
+        characterSchoolRequest.setPatronus("stag");
+
+        mock.perform(post(URI)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(characterSchoolRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void whenPostCharacter_withoutSchool_thenReturnCharacter() throws Exception {
+        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+
+        characterSchoolRequest.setName("Harry Potter");
+        characterSchoolRequest.setRole("student");
+        characterSchoolRequest.setHouse("1760529f-6d51-4cb1-bcb1-25087fce5bde");
+        characterSchoolRequest.setPatronus("stag");
+
+        mock.perform(post(URI)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(characterSchoolRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void whenPostCharacter_withoutHouse_thenReturnCharacter() throws Exception {
+        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+
+        characterSchoolRequest.setName("Harry Potter");
+        characterSchoolRequest.setRole("student");
+        characterSchoolRequest.setSchool("Hogwarts School of Witchcraft and Wizardry");
+        characterSchoolRequest.setPatronus("stag");
+
+        mock.perform(post(URI)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(characterSchoolRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void whenPostCharacter_withoutPatronus_thenReturnCharacter() throws Exception {
+        CharacterSchoolRequest characterSchoolRequest = new CharacterSchoolRequest();
+
+        characterSchoolRequest.setName("Harry Potter");
+        characterSchoolRequest.setRole("student");
+        characterSchoolRequest.setSchool("Hogwarts School of Witchcraft and Wizardry");
+        characterSchoolRequest.setHouse("1760529f-6d51-4cb1-bcb1-25087fce5bde");
+
+        mock.perform(post(URI)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(characterSchoolRequest)))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     public void whenPutCharacter_thenReturnCharacter() throws Exception {
         when(characterService.updateCharacter(anyLong(), any(CharacterSchoolRequest.class))).thenReturn(createCharacterSchool());
 
