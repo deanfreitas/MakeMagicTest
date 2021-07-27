@@ -39,15 +39,14 @@ public class CharacterSchoolRepositoryTests {
 
     @Test
     public void testGetCharacter_whenGetEntity_thenOK() {
-        long id = 1;
+        long id = characterRepository.findAll().get(0).getId();
         Optional<CharacterSchool> characterSchool = characterRepository.findById(id);
         assertNotNull(characterSchool);
     }
 
     @Test
     public void testGetCharacter_whenGetEntity_thenNullFound() {
-        long id = 80;
-        Optional<CharacterSchool> characterSchool = characterRepository.findById(id);
+        Optional<CharacterSchool> characterSchool = characterRepository.findById(Long.MAX_VALUE);
         assertNotNull(characterSchool);
     }
 

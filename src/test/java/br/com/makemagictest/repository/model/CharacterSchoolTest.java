@@ -45,4 +45,16 @@ public class CharacterSchoolTest {
         CharacterSchool characterSchool = new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue);
         assertTrue(characterSchool.toString().startsWith("CharacterSchool"));
     }
+
+    @Test
+    public void testEquals() {
+        CharacterSchool characterSchool = new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue);
+        assertEquals(characterSchool, new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue));
+    }
+
+    @Test
+    public void testHashCode() {
+        CharacterSchool characterSchool = new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue);
+        assertTrue(characterSchool.hashCode() == new CharacterSchool(longValue, stringValue, stringValue, stringValue, stringValue, stringValue).hashCode());
+    }
 }

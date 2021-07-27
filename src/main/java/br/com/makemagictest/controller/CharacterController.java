@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,7 +22,10 @@ import br.com.makemagictest.dto.CharacterSchoolRequest;
 import br.com.makemagictest.repository.model.CharacterSchool;
 import br.com.makemagictest.service.CharacterService;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
+@Validated
 @RestController
 @RequestMapping(value = "/api/v1")
 @AllArgsConstructor
@@ -31,7 +35,7 @@ public class CharacterController {
 
     @GetMapping("/character")
     public List<CharacterSchool> getAllCharacter(@RequestParam Map<String, ?> allParams) {
-     return characterService.getAllCharacters(allParams);
+        return characterService.getAllCharacters(allParams);
     }
 
     @GetMapping("/character/{id}")

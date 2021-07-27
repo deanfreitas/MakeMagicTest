@@ -53,7 +53,6 @@ public class CharacterServiceImplTest {
     public void testGetAllCharacters_withParameter_thenOK() {
 
         CharacterSchool characterSchool = createCharacterSchool();
-
         Map<String, String> allParams = createMappingParameter();
 
         Mockito.when(characterRepository.findCharacterByQueryParameter(allParams)).thenReturn(Collections.singletonList(characterSchool));
@@ -87,9 +86,7 @@ public class CharacterServiceImplTest {
     public void testSaveCharacter_thenOK() {
 
         PotterApi potterApi = createPotterApi();
-
         CharacterSchoolRequest characterSchoolRequest = createCharacterSchoolRequest();
-
         CharacterSchool characterSchool = createCharacterSchool();
 
         Mockito.when(potterApiService.getHouses()).thenReturn(potterApi);
@@ -181,9 +178,7 @@ public class CharacterServiceImplTest {
 
         Mockito.when(potterApiService.getHouses()).thenReturn(potterApi);
 
-        CharacterSchool character = characterService.saveCharacter(characterSchoolRequest);
-
-        assertEquals(characterSchoolRequest.getName(), character.getName());
+        characterService.saveCharacter(characterSchoolRequest);
     }
 
     @Test

@@ -2,7 +2,7 @@ package br.com.makemagictest.dto;
 
 import java.io.Serializable;
 
-import javax.validation.constraints.NotNull;
+import javax.validation.constraints.NotBlank;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -11,18 +11,18 @@ import lombok.Setter;
 @Setter
 public class CharacterSchoolRequest implements Serializable {
 
-    @NotNull(message = "Name Character cannot be missing or empty")
+    @NotBlank(message = "Name is mandatory")
     private String name;
 
-    @NotNull(message = "Role Character cannot be missing or empty")
+    @NotBlank(message = "Role is mandatory")
     private String role;
 
-    @NotNull(message = "School Character cannot be missing or empty")
+    @NotBlank(message = "School is mandatory")
     private String school;
 
-    @NotNull(message = "House Character cannot be missing or empty")
+    @NotBlank(message = "House is mandatory")
     private String house;
 
-    @NotNull(message = "Patronus Character cannot be missing or empty")
+    @NotBlank(message = "Patronus is mandatory")
     private String patronus;
 }
